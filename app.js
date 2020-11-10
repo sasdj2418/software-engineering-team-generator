@@ -53,8 +53,17 @@ function askQuestions(){
     )
     .then((response) => {
         switch (response.choices) {
-            case "manager"：
+            case "manager":
+            addManager(response);
+            break;
 
+            case "engineer":
+            addEngineer(response);
+            break;
+
+            case "intern":
+            addIntern(response);
+            break:
         }
         fs.writeFile(
             "./output/team.html",

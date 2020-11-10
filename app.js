@@ -10,19 +10,66 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+function addManager(){
+    inquirer.prompt([
+            {
+                type: "input",
+                message: "What is your office number?",
+                name: "office number"
+            },
+    ])
+    }
+
+function addEngineer(){
+    inquirer.prompt([
+            {
+                type: "input",
+                message: "What is your GitHub username?",
+                name: "gitHub username"
+            },
+    ])
+    }
+
+function addIntern(){
+    inquirer.prompt([
+            {
+                type: "input",
+                message: "Which school are you currently attending or what was the last school you attended before you started the internship?",
+                name: "school name"
+            },
+    ])
+    }
+
 function askQuestions(){
     inquirer.prompt(
         [
             {
                 type: "list",
-                message: "What would you like to do?",
+                message: "What type of team member are you adding to this team?",
                 name: "selection",
-                choices: ["add a manager", "add an engineer", ]
+                choices: ["manager", "engineer", "intern"]
             }
         ]
-    );
-    
-}
+    )
+    .then((response) => {
+        switch (response.choices) {
+            case "manager"：
+
+        }
+        fs.writeFile(
+            "./output/team.html",
+            htmlTemplate(response),
+            "utf-8",
+            (err) => {
+                err ? console.log(err) : console.log("success");
+            }
+        );
+    });
+
+
+
+
+
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
@@ -36,12 +83,3 @@ function askQuestions(){
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```

@@ -10,34 +10,93 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+var employees = [];
+var manager, engineer, intern;
 function addManager(){
     inquirer.prompt([
             {
                 type: "input",
-                message: "What is your office number?",
-                name: "office number"
+                message: "What is your name?",
+                name: "name"
             },
-    ])
+            {
+                type: "input",
+                message: "What is your ID?",
+                name: "id"
+            },
+            {
+                type: "input",
+                message: "What is your email?",
+                name: "email"
+            },
+            {
+                type: "input",
+                message: "What is your office number?",
+                name: "officeNumber"
+            }
+    ]).then((res) => {
+        manager = new Manager(res.name, res.id, res.email, res.officeNumber);
+        employees.push(manager);
+        askAddEmployee();
+    })
     }
 
 function addEngineer(){
     inquirer.prompt([
             {
                 type: "input",
-                message: "What is your GitHub username?",
-                name: "gitHub username"
+                message: "What is your name?",
+                name: "name"
             },
-    ])
+            {
+                type: "input",
+                message: "What is your ID?",
+                name: "id"
+            },
+            {
+                type: "input",
+                message: "What is your email?",
+                name: "email"
+            },
+            {
+                type: "input",
+                message: "What is your GitHub username?",
+                name: "github"
+            }
+    ]).then((res) => {
+        engineer = new Engineer(res.name, res.id, res.email, res.github);
+        employees.push(engineer);
+        askAddEmployee();
+    })
     }
 
 function addIntern(){
     inquirer.prompt([
             {
                 type: "input",
-                message: "Which school are you currently attending or what was the last school you attended before you started the internship?",
-                name: "school name"
+                message: "What is your name?",
+                name: "name"
             },
-    ])
+            {
+                type: "input",
+                message: "What is your ID?",
+                name: "id"
+            },
+            {
+                type: "input",
+                message: "What is your email?",
+                name: "email"
+            },
+            {
+                type: "input",
+                message: "Which school are you currently attending or what was the last school you attended before you started the internship?",
+                name: "school"
+            }
+    ]).then((res) => {
+        intern = new Intern(res.name, res.id, res.email, res.school);
+        employees.push(intern);
+        askAddEmployee();
+    })
     }
 
 function askQuestions(){
@@ -47,37 +106,54 @@ function askQuestions(){
                 type: "list",
                 message: "What type of team member are you adding to this team?",
                 name: "selection",
-                choices: ["manager", "engineer", "intern"]
+                choices: ["Manager", "Engineer", "Intern"]
             }
         ]
     )
     .then((response) => {
         switch (response.selection) {
-            case "manager":
-            addManager(response);
+            case "Manager":
+            addManager();
             break;
 
-            case "engineer":
-            addEngineer(response);
+            case "Engineer":
+            addEngineer();
             break;
 
-            case "intern":
-            addIntern(response);
+            case "Intern":
+            addIntern();
             break;
         }
-        fs.writeFile(
-            "./output/team.html",
-            htmlTemplate(response),
-            "utf-8",
-            (err) => {
-                err ? console.log(err) : console.log("success");
-            }
-        );
     });
 }
 askQuestions();
 
-
+function askAddEmployee() {
+    inquirer.prompt(
+        [
+            {
+                type: "confirm",
+                message: "Do you want to add other employees?",
+                name: "add",
+                default: false
+            }
+        ]
+    )
+    .then((response) => {
+        if(response.add){
+            askQuestions();
+        } else {
+            fs.writeFile(
+                "./output/team.html",
+                render(employees),
+                "utf-8",
+                (err) => {
+                    err ? console.log(err) : console.log("success");
+                }
+            );
+        }
+    });
+}
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will

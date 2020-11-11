@@ -52,7 +52,7 @@ function askQuestions(){
         ]
     )
     .then((response) => {
-        switch (response.choices) {
+        switch (response.selection) {
             case "manager":
             addManager(response);
             break;
@@ -63,7 +63,7 @@ function askQuestions(){
 
             case "intern":
             addIntern(response);
-            break:
+            break;
         }
         fs.writeFile(
             "./output/team.html",
@@ -74,13 +74,10 @@ function askQuestions(){
             }
         );
     });
+}
+askQuestions();
 
 
-
-
-
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
